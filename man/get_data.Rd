@@ -12,3 +12,6 @@ A data frame. Contains app data.
 \description{
 A function to send requests to the Colorado Information Marketplace. This will access app data for use in the Shiny dashboard.
 }
+\references{
+For more information on our data visit: https://data.colorado.gov/resource/hxf8-ab6k
+}
