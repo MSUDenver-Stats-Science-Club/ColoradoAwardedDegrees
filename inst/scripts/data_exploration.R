@@ -30,7 +30,13 @@ ad_count_by_uni <- ad_org |>
   dplyr::summarise(
     total_awarded = sum(recordcount, na.rm = TRUE)
   ) |>
-  dplyr::ungroup()
+  dplyr::ungroup() |>
+  dplyr::filter(
+    year == 2001
+  ) |>
+  dplyr::arrange(
+    total_awarded
+  )
 
 ad_degree_levels <- ad_org |>
   dplyr::group_by(
@@ -42,3 +48,38 @@ ad_degree_levels <- ad_org |>
     total_awarded = sum(recordcount, na.rm = TRUE)
   ) |>
   dplyr::ungroup()
+
+## Since we have time series data we can also look at predicting future outcomes and comparing them to actual results. We may not have actual results to compare to for the foreseeable future - depends on when data set is updated. We can at least create a prediction for 2018-2019 with a certain degree of confidence.
+
+
+## Visualization
+plt <- plotly::plot_ly(
+  type = "bar"
+) |>
+  plotly::add_trace(
+    x = ~total_awarded, 
+    y = ~institutionname,
+    data = ad_count_by_uni,
+    marker = list(
+      color = "#4F000B",
+      line = list(
+        color = "#000000",
+        width = 1.5
+      )
+    ),
+    hovertemplate = paste(
+      "%{y}<br>",
+      "Degrees Awarded: %{x}"
+    ),
+    showlegend = FALSE
+  ) |>
+  plotly::layout(
+    title = "Total Degrees Awarded by University by Year",
+    xaxis = list(title = "Degrees Awarded"),
+    yaxis = list(title = "Institution")
+  ) |>
+  plotly::config(
+    displayModeBar = FALSE
+  )
+
+plt
