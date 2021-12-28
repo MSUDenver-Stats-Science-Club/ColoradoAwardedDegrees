@@ -37,10 +37,26 @@ mod_analysis_server <- function(id, rv){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
     
+    ## Reactives ----
+    rv$year <- eventReactive(input$update, input$year)
+    rv$university <- eventReactive(input$update, input$unis)
+    rv$data <- eventReactive({
+      input$update
+    }, {
+      
+      ad <- app_data |>
+        dplyr::filter(
+          year == rv$year(),
+          institutionname %in% rv$university() 
+        )
+      
+    })
+    
+    ## Render UI ----
     output$sidebar <- renderUI({
       
-      years <- sort(unique(rv$data$year))
-      unis <- sort(unique(rv$data$institutionname))
+      years <- sort(unique(app_data$year))
+      unis <- sort(unique(app_data$institutionname))
       
       tagList(
         selectInput(
@@ -56,6 +72,12 @@ mod_analysis_server <- function(id, rv){
           choices = unis,
           selected = unis[1],
           multiple = TRUE,
+        ),
+        br(),
+        actionButton(
+          ns("update"),
+          label = "Update Data",
+          icon = icon("redo-alt", class = "solid")
         )
       )
       
@@ -71,7 +93,7 @@ mod_analysis_server <- function(id, rv){
     
     output$plot_1 <- plotly::renderPlotly({
       
-      ad_count_by_uni <- rv$data |>
+      ad_count_by_uni <- rv$data() |>
         dplyr::group_by(
           year,
           institutionname
@@ -80,9 +102,6 @@ mod_analysis_server <- function(id, rv){
           total_awarded = sum(recordcount, na.rm = TRUE)
         ) |>
         dplyr::ungroup() |>
-        dplyr::filter(
-          year == input$year
-        ) |>
         dplyr::arrange(
           total_awarded
         )
@@ -115,10 +134,16 @@ mod_analysis_server <- function(id, rv){
         plotly::config(
           displayModeBar = FALSE
         )
-
+      
       plt
       
     })
+    
+    ## Observe Events ----
+    
+    ## Misc ----
+    
+    
     
     # output$table <- DT::renderDataTable({
     #   

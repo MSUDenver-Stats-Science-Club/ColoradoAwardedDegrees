@@ -12,10 +12,31 @@ get_data <- function() {
   
   print("Fetching data from url...")
   
-  degrees_data <- httr::GET(data_url) |> httr::content()
+  degrees_data <- data_url |>
+    httr::GET() |>
+    httr::content()
   
   print("Found data!")
   
-  return(degrees_data)
+  ## Clean/Organize data
+  ad_org <- degrees_data |>
+    dplyr::arrange(
+      year,
+      institutionname
+    ) |>
+    dplyr::filter(
+      !is.na(recordcount)
+    ) |>
+    dplyr::mutate(
+      programname = ifelse(
+        test = is.na(programname),
+        yes = "General",
+        no = programname
+      )
+    )
+  
+  print("Data cleaned and ready for use!")
+  
+  return(ad_org)
   
 }

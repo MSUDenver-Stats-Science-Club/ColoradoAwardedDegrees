@@ -5,14 +5,10 @@
 #' @import shiny
 #' @noRd
 app_server <- function( input, output, session ) {
-  # Your application server logic 
   
-  app_data <- get_data()
-  
-  clean_data <- clean_data(app_data)
-  
+  ## Load in my data and set reactive values list
+  app_data <<- get_data()
   rv <- reactiveValues()
-  rv$data <- clean_data
   
   ## Modules here
   mod_home_server("home_ui_1", rv = rv)

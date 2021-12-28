@@ -18,12 +18,15 @@ dashboard_page <- function() {
       mod_home_ui("home_ui_1")
     ),
     tabPanel(
-      title = "Analysis",
+      title = "University Map"
+    ),
+    tabPanel(
+      title = "Degrees Analysis",
       # Module here
       mod_analysis_ui("analysis_ui_1")
     ),
     tabPanel(
-      title = "Test"
+      title = "Report"
     )
   )
   
