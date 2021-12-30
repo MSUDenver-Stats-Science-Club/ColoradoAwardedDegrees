@@ -15,9 +15,6 @@ mod_home_ui <- function(id){
       fluidRow(
         textOutput(ns("about"))
       )
-      # fluidRow(
-      #   uiOutput(ns("test"))
-      # )
     )
   )
   
@@ -35,28 +32,6 @@ mod_home_server <- function(id, rv){
       message <- "This is an app meant to explore data pulled from the Colorado Information Marketplace related to degrees awarded by higher education institutions within Colorado between the years of 2001 and 2017."
       
     })
-    
-    # output$test <- renderUI({
-    #   
-    #   if (isTRUE(condition)) {
-    #     
-    #     selectInput(
-    #       ns("true-outcome"),
-    #       label = "True Outcome",
-    #       choices = c(1:3)
-    #     )
-    #     
-    #   } else {
-    #     
-    #     numericInput(
-    #       ns("false-outcome"),
-    #       label = "False Outcome",
-    #       value = 10
-    #     )
-    #     
-    #   }
-    #   
-    # })
  
   })
 }

@@ -12,21 +12,13 @@ mod_analysis_ui <- function(id){
   
   tagList(
     sidebarLayout(
-      sidebarPanel = sidebarPanel(
-        uiOutput(ns("sidebar"))
-      ),
+      sidebarPanel = mod_inputs_ui("inputs_ui_1"),
       mainPanel = mainPanel(
         uiOutput(ns("main"))
       ),
       position = "left"
     )
   )
-  
-  # fluidPage(
-  # fluidRow(
-  # DT::dataTableOutput(ns("table"))
-  # )
-  # )
   
 }
     
@@ -38,51 +30,8 @@ mod_analysis_server <- function(id, rv){
     ns <- session$ns
     
     ## Reactives ----
-    rv$year <- eventReactive(input$update, input$year)
-    rv$university <- eventReactive(input$update, input$unis)
-    rv$data <- eventReactive({
-      input$update
-    }, {
-      
-      ad <- app_data |>
-        dplyr::filter(
-          year == rv$year(),
-          institutionname %in% rv$university() 
-        )
-      
-    })
     
     ## Render UI ----
-    output$sidebar <- renderUI({
-      
-      years <- sort(unique(app_data$year))
-      unis <- sort(unique(app_data$institutionname))
-      
-      tagList(
-        selectInput(
-          ns("year"),
-          label = "Award Year",
-          choices = years,
-          selected = years[1]
-        ),
-        br(),
-        selectInput(
-          ns("unis"),
-          label = "Universities",
-          choices = unis,
-          selected = unis[1],
-          multiple = TRUE,
-        ),
-        br(),
-        actionButton(
-          ns("update"),
-          label = "Update Data",
-          icon = icon("redo-alt", class = "solid")
-        )
-      )
-      
-    })
-    
     output$main <- renderUI({
       
       tagList(
@@ -142,14 +91,6 @@ mod_analysis_server <- function(id, rv){
     ## Observe Events ----
     
     ## Misc ----
-    
-    
-    
-    # output$table <- DT::renderDataTable({
-    #   
-    #   rv$data
-    #   
-    # })
  
   })
 }

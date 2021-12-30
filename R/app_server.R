@@ -13,5 +13,6 @@ app_server <- function( input, output, session ) {
   ## Modules here
   mod_home_server("home_ui_1", rv = rv)
   mod_analysis_server("analysis_ui_1", rv = rv)
+  mod_inputs_server("inputs_ui_1", rv = rv)
   
 }
