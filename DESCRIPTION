@@ -5,6 +5,7 @@ Authors@R: person(given = 'Brady', family = 'Lamson', email = 'blamson@msudenver
 Description: A Shiny application that explores degrees awarded in Colorado by higher education institutions.
 License: MIT + file LICENSE
 Imports: 
+    leaflet,
     config (>= 0.3.1),
     golem (>= 0.3.1),
     shiny (>= 1.7.1)
