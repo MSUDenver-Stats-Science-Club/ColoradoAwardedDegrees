@@ -27,11 +27,6 @@ mod_uni_map_server <- function(id, rv){
     
     ## Reactives ---
     
-    ## Experimental Code ---
-    
-    ## Read in location dataset
-    location_df <- readRDS("data/institution_locations.rds")
-    
     ## Create map object
     colorado_counties <- maps::map("county", 'colorado', fill = TRUE, plot = FALSE)
     
@@ -42,8 +37,11 @@ mod_uni_map_server <- function(id, rv){
       )
     })
     
-    ## generate map output
+    ## generate leaflet output
     output$coloradoMap <- renderLeaflet({
+      print("Beginning map generation ---------------")
+      degree_count <- dplyr::count(app_data, institutionname)
+      print("degree count created")
       
       leaflet(data = colorado_counties, 
               options = leafletOptions(
@@ -54,9 +52,12 @@ mod_uni_map_server <- function(id, rv){
         addProviderTiles(providers$Stamen.TonerLines,
                          options = providerTileOptions(opacity = 0.35)) |>
         addProviderTiles(providers$Stamen.TonerLabels) |>
-        addMarkers(~location_df$long, 
-                   ~location_df$lat, 
-                   popup = location_df$institutionname) |>
+        addMarkers(~unique(app_data$long),
+                   ~unique(app_data$lat),
+                   popup = unique(app_data$institutionname)) |>
+        addCircles(lng = ~unique(app_data$long),
+                   lat = ~unique(app_data$lat),
+                   radius = degree_count$n * 25) |>
         addPolygons(
           color = "#444444",
           weight = 1.5,
