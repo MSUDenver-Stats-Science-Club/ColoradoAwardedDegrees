@@ -39,9 +39,7 @@ mod_uni_map_server <- function(id, rv){
     
     ## generate leaflet output
     output$coloradoMap <- renderLeaflet({
-      print("Beginning map generation ---------------")
       degree_count <- dplyr::count(app_data, institutionname)
-      print("degree count created")
       
       leaflet(data = colorado_counties, 
               options = leafletOptions(
