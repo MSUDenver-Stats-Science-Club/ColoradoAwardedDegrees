@@ -44,18 +44,20 @@ mod_uni_map_server <- function(id, rv){
       leaflet(data = colorado_counties, 
               options = leafletOptions(
                 minZoom = 6.4,
-                maxZoom = 12.5)
+                maxZoom = 18)
       ) |>
         addProviderTiles(providers$Thunderforest.MobileAtlas) |>
         addProviderTiles(providers$Stamen.TonerLines,
                          options = providerTileOptions(opacity = 0.35)) |>
         addProviderTiles(providers$Stamen.TonerLabels) |>
-        addMarkers(~unique(app_data$long),
-                   ~unique(app_data$lat),
-                   popup = unique(app_data$institutionname)) |>
-        addCircles(lng = ~unique(app_data$long),
-                   lat = ~unique(app_data$lat),
-                   radius = degree_count$n * 25) |>
+        addMarkers(app_data$long,
+                   app_data$lat,
+                   clusterOptions = markerClusterOptions(spiderfyOnMaxZoom = FALSE)
+                   ) |>
+        addMarkers(unique(app_data$long),
+                   unique(app_data$lat),
+                   popup = unique(app_data$institutionname)
+                   ) |>
         addPolygons(
           color = "#444444",
           weight = 1.5,
