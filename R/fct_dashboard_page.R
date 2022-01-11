@@ -24,9 +24,6 @@ dashboard_page <- function() {
       title = "Degrees Analysis",
       # Module here
       mod_analysis_ui("analysis_ui_1")
-    ),
-    tabPanel(
-      title = "Report"
     )
   )
   
