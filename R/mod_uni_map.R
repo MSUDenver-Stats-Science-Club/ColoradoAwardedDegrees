@@ -54,13 +54,13 @@ mod_uni_map_server <- function(id, rv){
         addProviderTiles(providers$Stamen.TonerLines,
                          options = providerTileOptions(opacity = 0.35)) |>
         addProviderTiles(providers$Stamen.TonerLabels) |>
-        addMarkers(app_data$long,
-                   app_data$lat,
+        addMarkers(rv$map_data()$long,
+                   rv$map_data()$lat,
                    clusterOptions = markerClusterOptions(spiderfyOnMaxZoom = FALSE)
                    ) |>
-        addMarkers(unique(app_data$long),
-                   unique(app_data$lat),
-                   popup = unique(app_data$institutionname)
+        addMarkers(unique(rv$map_data()$long),
+                   unique(rv$map_data()$lat),
+                   popup = unique(rv$map_data()$institutionname)
                    ) |>
         addPolygons(
           color = "#444444",

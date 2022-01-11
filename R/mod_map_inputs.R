@@ -35,14 +35,20 @@ mod_map_inputs_server <- function(id, rv){
     }, {
       
       ## Modify data ----
-      ad <- app_data
+      #ad <- app_data
+      
+      validate(
+        need(
+          (!is.null(rv$degreelevel()) | nchar(rv$degreelevel()) > 0),
+          glue::glue("Please select a degree level from the available choices!")
+        )
+      )
+      
       print("begin modifying data -----")
-      if (!is.null(rv$degreelevel()) | nchar(rv$degreelevel()) > 0) {
-        ad <- ad |>
-          dplyr::filter(
-            degreelevel %in% rv$degreelevel()
-          )
-      }
+      ad <- app_data |>
+        dplyr::filter(
+          degreelevel %in% rv$degreelevel()
+        )
       
     })
     
@@ -55,11 +61,18 @@ mod_map_inputs_server <- function(id, rv){
         h3("Filters"),
         hr(),
         selectInput(
-          ns("degree_level"),
+          ns("degreelevel"),
           label = "Degree Level",
           choices = degreeLevels,
           selected = degreeLevels[1],
           multiple = TRUE
+        ),
+        br(),
+        hr(),
+        actionButton(
+          ns("update"),
+          label = "Update Data",
+          icon = icon("redo-alt", class = "solid")
         )
       )
       
