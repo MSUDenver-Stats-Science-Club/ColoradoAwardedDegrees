@@ -15,5 +15,6 @@ app_server <- function( input, output, session ) {
   mod_analysis_server("analysis_ui_1", rv = rv)
   mod_inputs_server("inputs_ui_1", rv = rv)
   mod_uni_map_server("uni_map_ui_1", rv = rv)
+  mod_map_inputs_server("map_inputs_ui_1", rv = rv)
   
 }

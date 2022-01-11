@@ -12,8 +12,12 @@ library(leaflet)
 mod_uni_map_ui <- function(id){
   ns <- NS(id)
   tagList(
-    fluidPage(
-      uiOutput(ns("main"))
+    sidebarLayout(
+      sidebarPanel = mod_map_inputs_ui("map_inputs_ui_1"),
+      mainPanel = mainPanel(
+        uiOutput(ns("main"))
+      ),
+      position = "left"
     )
   )
 }
@@ -71,7 +75,6 @@ mod_uni_map_server <- function(id, rv){
             bringToFront = TRUE)
         )
     })
-
   })
 }
     
