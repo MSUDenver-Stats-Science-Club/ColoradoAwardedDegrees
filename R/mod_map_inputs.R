@@ -44,7 +44,7 @@ mod_map_inputs_server <- function(id, rv){
         )
       )
       
-      print("begin modifying data -----")
+      #print("begin modifying data -----")
       ad <- app_data |>
         dplyr::filter(
           degreelevel %in% rv$degreelevel()

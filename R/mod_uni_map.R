@@ -12,6 +12,7 @@ library(leaflet)
 mod_uni_map_ui <- function(id){
   ns <- NS(id)
   tagList(
+    titlePanel("Degrees Awarded by Region"),
     sidebarLayout(
       sidebarPanel = mod_map_inputs_ui("map_inputs_ui_1"),
       mainPanel = mainPanel(
@@ -47,7 +48,7 @@ mod_uni_map_server <- function(id, rv){
       
       leaflet(data = colorado_counties, 
               options = leafletOptions(
-                minZoom = 6.4,
+                minZoom = 6,
                 maxZoom = 18)
       ) |>
         addProviderTiles(providers$Thunderforest.MobileAtlas) |>
@@ -58,15 +59,21 @@ mod_uni_map_server <- function(id, rv){
                    rv$map_data()$lat,
                    clusterOptions = markerClusterOptions(spiderfyOnMaxZoom = FALSE)
                    ) |>
-        addMarkers(unique(rv$map_data()$long),
-                   unique(rv$map_data()$lat),
-                   popup = unique(rv$map_data()$institutionname)
+        addAwesomeMarkers(lng = unique(rv$map_data()$long),
+                   lat = unique(rv$map_data()$lat), 
+                   icon = awesomeIcons(icon = 'fa-university', 
+                                       markerColor = 'green', 
+                                       iconColor = 'black', 
+                                       library = "fa"),
+                   popup = unique(rv$map_data()$institutionname),
+                   options = markerOptions(opacity = .6, 
+                                           riseOnHover = TRUE)
                    ) |>
         addPolygons(
           color = "#444444",
           weight = 1.5,
-          smoothFactor = 1,
-          fillColor = RColorBrewer::brewer.pal(12, "Paired"),
+          smoothFactor = 1, 
+          fillColor = RColorBrewer::brewer.pal(11, "Spectral"),
           stroke = TRUE,
           highlightOptions = highlightOptions(
             stroke = TRUE,
