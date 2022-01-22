@@ -9,6 +9,7 @@ get_data <- function() {
   
   ## Read in our data (to be converted into a function)
   data_url <- "https://data.colorado.gov/resource/hxf8-ab6k.csv?$limit=250000"
+  location_df <- readRDS("data/institution_locations.rds")
   
   print("Fetching data from url...")
   
@@ -45,7 +46,8 @@ get_data <- function() {
         yes = "General",
         no = programname
       )
-    )
+    ) |>
+    dplyr::left_join(location_df, by = "institutionname")
   
   print("Data cleaned and ready for use!")
   

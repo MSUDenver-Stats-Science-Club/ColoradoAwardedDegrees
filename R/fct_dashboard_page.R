@@ -17,7 +17,9 @@ dashboard_page <- function() {
       mod_home_ui("home_ui_1")
     ),
     tabPanel(
-      title = "University Map"
+      title = "University Map",
+      # Module here
+      mod_uni_map_ui("uni_map_ui_1")
     ),
     tabPanel(
       title = "Degrees Analysis",
