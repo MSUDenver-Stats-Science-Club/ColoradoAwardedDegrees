@@ -14,7 +14,6 @@ dashboard_page <- function() {
     theme = bslib::bs_theme(bootswatch = "flatly"),
     tabPanel(
       title = "Home",
-      # Module here
       mod_home_ui("home_ui_1")
     ),
     tabPanel(
@@ -22,7 +21,6 @@ dashboard_page <- function() {
     ),
     tabPanel(
       title = "Degrees Analysis",
-      # Module here
       mod_analysis_ui("analysis_ui_1")
     )
   )

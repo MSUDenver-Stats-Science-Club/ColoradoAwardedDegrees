@@ -12,21 +12,33 @@ get_data <- function() {
   
   print("Fetching data from url...")
   
-  degrees_data <- data_url |>
-    httr::GET() |>
-    httr::content()
+  degrees_data <- data_url %>%
+    httr::GET() %>%
+    httr::content(show_col_types = FALSE)
   
   print("Found data!")
   
   ## Clean/Organize data
-  ad_org <- degrees_data |>
+  ad_org <- degrees_data %>%
+    dplyr::select(
+      -cobased,
+      -division,
+      -institutionlevelid,
+      -institutiontype,
+      -taxtype,
+      -agemin,
+      -agemax,
+      -residencyid,
+      -cip,
+      -cip2
+    ) %>%
     dplyr::arrange(
       year,
       institutionname
-    ) |>
+    ) %>%
     dplyr::filter(
       !is.na(recordcount)
-    ) |>
+    ) %>%
     dplyr::mutate(
       programname = ifelse(
         test = is.na(programname),

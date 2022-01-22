@@ -36,53 +36,38 @@ mod_inputs_server <- function(id, rv){
     }, {
       
       ## Validations ----
-      validate(
-        need(
-          (!is.null(rv$university()) | nchar(rv$university()) > 0) & (!is.null(rv$program()) | nchar(rv$program()) > 0 ),
-          glue::glue("Please select a university and program from the available choices!")
-        )
-      )
+      ## None currently needed
       
       ## Modify data ----
       if (rv$focus() == "Yearly") {
-        
-        ad <- app_data |>
+        ## Filter down the data to the year in focus
+        ad <- app_data %>%
         dplyr::filter(
-          year %in% rv$year()
+          year %in% as.integer(rv$year())
         )
-      
-        ## TODO - University and Program need to be modified so that if an option isn't selected all results are returned
-        
-        ad <- ad |>
-          dplyr::filter(
-            institutionname %in% rv$university()
-          )
-        
-        ad <- ad |>
-          dplyr::filter(
-            programname %in% rv$program()
-          )
-        
       } else {
-        
-        ad <- app_data |>
+        ## Filter data to range selected
+        ad <- app_data %>%
           dplyr::filter(
             dplyr::between(year, rv$year()[1], rv$year()[2])
           )
-        
-        ## TODO - University and Program need to be modified so that if an option isn't selected all results are returned
-        
-        ad <- ad |>
+      }
+      
+      if (!is.null(rv$university())) {
+        ad <- ad %>%
           dplyr::filter(
             institutionname %in% rv$university()
           )
-        
-        ad <- ad |>
+      }
+      
+      if (!is.null(rv$program())) {
+        ad <- ad %>%
           dplyr::filter(
             programname %in% rv$program()
           )
-        
       }
+      
+      return(ad)
       
     })
     
@@ -160,33 +145,31 @@ mod_inputs_server <- function(id, rv){
 
       if (rv$focus() == "Yearly") {
         
-        unis <- app_data |>
-          dplyr::filter(year %in% rv$year()) |>
-          dplyr::pull(institutionname) |>
-          unique() |>
+        unis <- app_data %>%
+          dplyr::filter(year %in% rv$year()) %>%
+          dplyr::pull(institutionname) %>%
+          unique() %>%
           sort()
 
         selectInput(
           ns("unis"),
           label = "Universities",
           choices = unis,
-          selected = unis[1],
           multiple = TRUE
         )
         
       } else {
         
-        unis <- app_data |>
-          dplyr::filter(dplyr::between(year, rv$year()[1], rv$year()[2])) |>
-          dplyr::pull(institutionname) |>
-          unique() |>
+        unis <- app_data %>%
+          dplyr::filter(dplyr::between(year, rv$year()[1], rv$year()[2])) %>%
+          dplyr::pull(institutionname) %>%
+          unique() %>%
           sort()
         
         selectInput(
           ns("unis"),
           label = "Universities",
           choices = unis,
-          selected = unis[1],
           multiple = TRUE
         )
         
@@ -201,39 +184,37 @@ mod_inputs_server <- function(id, rv){
 
       if (rv$focus() == "Yearly") {
       
-        program <- app_data |>
+        program <- app_data %>%
           dplyr::filter(
             year %in% rv$year(),
             institutionname %in% rv$university()
-          ) |>
-          dplyr::pull(programname) |>
-          unique() |>
+          ) %>%
+          dplyr::pull(programname) %>%
+          unique() %>%
           sort()
         
         selectInput(
           ns("program"),
           label = "Program Name",
           choices = program,
-          selected = program[1],
           multiple = TRUE
         )
       
       } else {
         
-        program <- app_data |>
+        program <- app_data %>%
           dplyr::filter(
             dplyr::between(year, rv$year()[1], rv$year()[2]),
             institutionname %in% rv$university()
-          ) |>
-          dplyr::pull(programname) |>
-          unique() |>
+          ) %>%
+          dplyr::pull(programname) %>%
+          unique() %>%
           sort()
         
         selectInput(
           ns("program"),
           label = "Program Name",
           choices = program,
-          selected = program[1],
           multiple = TRUE
         )
         

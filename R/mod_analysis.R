@@ -56,16 +56,15 @@ mod_analysis_server <- function(id, rv){
           ),
           br(),
           fluidRow(
-            bs4Dash::box(
-              width = 12,
-              maximizable = TRUE,
-              elevation = 1,
-              plotly::plotlyOutput(ns("plot_1"))
-            )
+            DT::dataTableOutput(ns("test_dt"))
           )
         )
       )
       
+    })
+    
+    output$test_dt <- DT::renderDataTable({
+      DT::datatable(rv$data())
     })
     
     output$box_1 <- renderUI({
@@ -135,22 +134,22 @@ mod_analysis_server <- function(id, rv){
       ## Need to incorporate options for yearly vs range views
       if (rv$focus() == "Yearly") {
         
-        ad_count_by_uni <- rv$data() |>
+        ad_count_by_uni <- rv$data() %>%
           dplyr::group_by(
             year,
             institutionname
-          ) |>
+          ) %>%
           dplyr::summarise(
             total_awarded = sum(recordcount, na.rm = TRUE)
-          ) |>
-          dplyr::ungroup() |>
+          ) %>%
+          dplyr::ungroup() %>%
           dplyr::arrange(
             total_awarded
           )
 
         plt <- plotly::plot_ly(
           type = "bar"
-        ) |>
+        ) %>%
           plotly::add_trace(
             x = ~total_awarded,
             y = ~institutionname,
@@ -167,12 +166,12 @@ mod_analysis_server <- function(id, rv){
               "Degrees Awarded: %{x}"
             ),
             showlegend = FALSE
-          ) |>
+          ) %>%
           plotly::layout(
             title = "Total Degrees Awarded by University by Year",
             xaxis = list(title = "Degrees Awarded"),
             yaxis = list(title = "Institution")
-          ) |>
+          ) %>%
           plotly::config(
             displayModeBar = FALSE
           )
