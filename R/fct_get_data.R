@@ -9,7 +9,7 @@ get_data <- function() {
   
   ## Read in our data (to be converted into a function)
   data_url <- "https://data.colorado.gov/resource/hxf8-ab6k.csv?$limit=250000"
-  location_df <- readRDS("data/institution_locations.rds")
+  location_df <- readr::read_csv("inst/extdata/institution_locations.csv", show_col_types = FALSE)
   
   print("Fetching data from url...")
   

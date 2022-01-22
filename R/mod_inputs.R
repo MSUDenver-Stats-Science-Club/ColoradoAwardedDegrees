@@ -42,9 +42,12 @@ mod_inputs_server <- function(id, rv){
       if (rv$focus() == "Yearly") {
         ## Filter down the data to the year in focus
         ad <- app_data %>%
-        dplyr::filter(
-          year %in% as.integer(rv$year())
-        )
+          dplyr::select(
+            -county:long
+          ) %>%
+          dplyr::filter(
+            year %in% as.integer(rv$year())
+          )
       } else {
         ## Filter data to range selected
         ad <- app_data %>%

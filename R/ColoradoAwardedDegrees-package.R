@@ -7,6 +7,6 @@
 ## usethis namespace: end
 utils::globalVariables(
   c(
-    "agemax", "agemin", "app_data", "cip", "cip2", "cobased", "division", "institutionlevelid", "institutionname", "institutiontype", "programname", "recordcount", "residencyid", "taxtype", "total_awarded", "year"
+    "agemax", "agemin", "app_data", "cip", "cip2", "cobased", "division", "institutionlevelid", "institutionname", "institutiontype", "programname", "recordcount", "residencyid", "taxtype", "total_awarded", "year", "addMarkers", "addPolygons", "addProviderTiles", "county", "degreelevel", "highlightOptions", "leaflet", "leafletOptions", "leafletOutput", "long", "markerClusterOptions", "providerTileOptions", "providers", "renderLeaflet"
   )
 )
