@@ -6,5 +6,7 @@
 ## usethis namespace: start
 ## usethis namespace: end
 utils::globalVariables(
-  c("app_data", "institutionname", "programname", "recordcount", "total_awarded", "year")
+  c(
+    "agemax", "agemin", "app_data", "cip", "cip2", "cobased", "division", "institutionlevelid", "institutionname", "institutiontype", "programname", "recordcount", "residencyid", "taxtype", "total_awarded", "year"
+  )
 )

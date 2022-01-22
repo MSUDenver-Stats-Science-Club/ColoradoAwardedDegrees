@@ -21,3 +21,19 @@ program <- app_data |>
   dplyr::pull(programname) |>
   unique() |>
   sort()
+
+## Reactive Data ----
+ad <- app_data |>
+  dplyr::filter(
+    year == rv$year
+  )
+
+ad <- ad |>
+  dplyr::filter(
+    institutionname %in% rv$university
+  )
+
+ad <- ad |>
+  dplyr::filter(
+    programname %in% rv$program
+  )
