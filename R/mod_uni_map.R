@@ -12,17 +12,23 @@ library(leaflet)
 mod_uni_map_ui <- function(id){
   ns <- NS(id)
   tagList(
-    titlePanel("Degrees Awarded by Region"),
-    sidebarLayout(
-      sidebarPanel = mod_map_inputs_ui("map_inputs_ui_1"),
-      mainPanel = mainPanel(
-        uiOutput(ns("main"))
+    mainPanel = mainPanel(
+          uiOutput(ns("main"))
+        ),
+    absolutePanel(
+      tagList(
+        #h3("Testing!"),
+        mod_map_inputs_ui("map_inputs_ui_1")
       ),
-      position = "left"
+      
+      top = "75px", left = "55px", 
+      height = "auto", width = "1000px", 
+      draggable = TRUE, 
+      style = "opacity: 0.65; z-index:10;"
     )
   )
 }
-    
+
 #' uni_map Server Functions
 #'
 #' @noRd 
@@ -32,13 +38,14 @@ mod_uni_map_server <- function(id, rv){
     
     ## Reactives ---
     
+    
     ## Create map object
     colorado_counties <- maps::map("county", 'colorado', fill = TRUE, plot = FALSE)
     
     ## Render UI ---
     output$main <- renderUI({
       tagList(
-        leafletOutput(ns("coloradoMap"))
+        leafletOutput(ns("coloradoMap"), height = "100vh", width = "100vw")
       )
     })
     
@@ -48,32 +55,26 @@ mod_uni_map_server <- function(id, rv){
       
       leaflet(data = colorado_counties, 
               options = leafletOptions(
-                minZoom = 6,
+                minZoom = 8,
                 maxZoom = 18)
       ) |>
         addProviderTiles(providers$Thunderforest.MobileAtlas) |>
         addProviderTiles(providers$Stamen.TonerLines,
                          options = providerTileOptions(opacity = 0.35)) |>
         addProviderTiles(providers$Stamen.TonerLabels) |>
-        addMarkers(rv$map_data()$long,
-                   rv$map_data()$lat,
+        addMarkers(app_data$long,
+                   app_data$lat,
                    clusterOptions = markerClusterOptions(spiderfyOnMaxZoom = FALSE)
-                   ) |>
-        addAwesomeMarkers(lng = unique(rv$map_data()$long),
-                   lat = unique(rv$map_data()$lat), 
-                   icon = awesomeIcons(icon = 'fa-university', 
-                                       markerColor = 'green', 
-                                       iconColor = 'black', 
-                                       library = "fa"),
-                   popup = unique(rv$map_data()$institutionname),
-                   options = markerOptions(opacity = .6, 
-                                           riseOnHover = TRUE)
-                   ) |>
+        ) |>
+        addMarkers(unique(app_data$long),
+                   unique(app_data$lat),
+                   popup = unique(app_data$institutionname)
+        ) |>
         addPolygons(
           color = "#444444",
           weight = 1.5,
-          smoothFactor = 1, 
-          fillColor = RColorBrewer::brewer.pal(11, "Spectral"),
+          smoothFactor = 1,
+          fillColor = RColorBrewer::brewer.pal(12, "Paired"),
           stroke = TRUE,
           highlightOptions = highlightOptions(
             stroke = TRUE,
@@ -84,11 +85,3 @@ mod_uni_map_server <- function(id, rv){
     })
   })
 }
-    
-## To be copied in the UI
-# mod_uni_map_ui("uni_map_ui_1")
-    
-## To be copied in the server
-# mod_uni_map_server("uni_map_ui_1")
-
-### Working on bringing everything over. 

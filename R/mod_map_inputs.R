@@ -39,7 +39,7 @@ mod_map_inputs_server <- function(id, rv){
       
       validate(
         need(
-          (!is.null(rv$degreelevel()) | nchar(rv$degreelevel()) > 0),
+          !is.null(rv$degreelevel()),
           glue::glue("Please select a degree level from the available choices!")
         )
       )
@@ -64,7 +64,6 @@ mod_map_inputs_server <- function(id, rv){
           ns("degreelevel"),
           label = "Degree Level",
           choices = degreeLevels,
-          selected = degreeLevels[1],
           multiple = TRUE
         ),
         br(),
