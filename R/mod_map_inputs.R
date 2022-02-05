@@ -11,11 +11,12 @@ mod_map_inputs_ui <- function(id){
   ns <- NS(id)
   
   tagList(
-    sidebarPanel(
+    tabPanel(
+      title = "Map Sidebar",
       uiOutput(ns("sidebar"))
+    )
   )
- 
-  )
+  
 }
     
 #' map_inputs Server Functions
@@ -35,20 +36,27 @@ mod_map_inputs_server <- function(id, rv){
     }, {
       
       ## Modify data ----
-      #ad <- app_data
+      ad <- app_data
       
-      validate(
-        need(
-          !is.null(rv$degreelevel()),
-          glue::glue("Please select a degree level from the available choices!")
-        )
-      )
+      # validate(
+      #   need(
+      #     !is.null(rv$degreelevel()),
+      #     glue::glue("Please select a degree level from the available choices!")
+      #   )
+      # )
+      
+      if (!is.null(rv$degreelevel())) {
+        ad <- ad %>%
+          dplyr::filter(
+            degreelevel %in% rv$degreelevel()
+          )
+      }
       
       #print("begin modifying data -----")
-      ad <- app_data |>
-        dplyr::filter(
-          degreelevel %in% rv$degreelevel()
-        )
+      # ad <- app_data |>
+      #   dplyr::filter(
+      #     degreelevel %in% rv$degreelevel()
+      #   )
       
     })
     

@@ -14,7 +14,8 @@ mod_analysis_ui <- function(id){
     sidebarLayout(
       sidebarPanel = mod_inputs_ui("inputs_ui_1"),
       mainPanel = mainPanel(
-        uiOutput(ns("main"))
+        uiOutput(ns("main")),
+        width = 9
       ),
       position = "left"
     )
@@ -56,15 +57,48 @@ mod_analysis_server <- function(id, rv){
           ),
           br(),
           fluidRow(
-            DT::dataTableOutput(ns("test_dt"))
+            plotly::plotlyOutput(ns("plot_1"))
+          ),
+          br(),
+          fluidRow(
+            DT::dataTableOutput(ns("data_table"))
           )
         )
       )
       
     })
     
-    output$test_dt <- DT::renderDataTable({
-      DT::datatable(rv$data())
+    output$data_table <- DT::renderDataTable({
+      req(rv$data())
+      
+      dt_data <- rv$data() %>%
+        dplyr::select(
+          -agedesc,
+          -county,
+          -lat,
+          -long
+        )
+      
+      if (nrow(dt_data) < 10) {
+        h = nrow(dt_data) * 16
+      } else {
+        h = 532
+      }
+      
+      DT::datatable(
+        dt_data,
+        options = list(
+          dom = "tp"
+        ),
+        rownames = FALSE,
+        colnames = dt_data %>%
+          colnames() %>% 
+          stringr::str_replace_all("name", " name") %>%
+          stringr::str_replace_all("level", " level") %>% 
+          stringr::str_to_title(),
+        height = h
+      )
+      
     })
     
     output$box_1 <- renderUI({
@@ -155,9 +189,9 @@ mod_analysis_server <- function(id, rv){
             y = ~institutionname,
             data = ad_count_by_uni,
             marker = list(
-              color = "#4F000B",
+              color = "#BEE3DB",
               line = list(
-                color = "#000000",
+                color = "#89B0AE",
                 width = 1.5
               )
             ),

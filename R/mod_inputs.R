@@ -12,7 +12,8 @@ mod_inputs_ui <- function(id){
   
   tagList(
     sidebarPanel(
-      uiOutput(ns("sidebar"))
+      uiOutput(ns("sidebar")),
+      width = 3
     )
   )
   
